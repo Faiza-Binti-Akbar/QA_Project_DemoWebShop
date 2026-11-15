@@ -12,6 +12,8 @@
   "type": "commonjs",
   "devDependencies": {
     "@playwright/test": "^1.65.1",
+    "allure-commandline": "^2.46.1",
+    "allure-playwright": "^3.14.0",
     "newman": "^6.2.3",
     "newman-reporter-htmlextra": "^1.23.1"
   }
