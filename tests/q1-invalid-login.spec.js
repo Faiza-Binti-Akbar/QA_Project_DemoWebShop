@@ -4,8 +4,6 @@ const { LoginPage } = require('../pages/LoginPage');
 
 test('Q1 - Invalid login should display error', async ({ page }) => {
   const loginPage = new LoginPage(page);
-
- 
   await loginPage.navigateToLogin();
 
  
