@@ -1,0 +1,119 @@
+
+{
+  "info": {
+    "name": "Demo Web Shop Assignment - API Testing",
+    "description": "GET and PUT API automation using JSONPlaceholder",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Q4 - GET Users",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('GET status code is 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "const users = pm.response.json();",
+              "",
+              "pm.test('Response is a non-empty array', function () {",
+              "    pm.expect(users).to.be.an('array').that.is.not.empty;",
+              "});",
+              "",
+              "pm.test('Every user has valid id, name and email', function () {",
+              "    users.forEach(function (user) {",
+              "        pm.expect(user.id).to.be.a('number');",
+              "        pm.expect(user.name).to.be.a('string').that.is.not.empty;",
+              "        pm.expect(user.email).to.be.a('string').that.is.not.empty;",
+              "    });",
+              "});",
+              "",
+              "if (Array.isArray(users) && users.length > 0) {",
+              "    pm.collectionVariables.set('userId', users[0].id);",
+              "    pm.collectionVariables.set('userPhone', users[0].phone);",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/users"
+      }
+    },
+    {
+      "name": "Q4 - PUT Update User",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "const uniqueValue = Date.now();",
+              "pm.collectionVariables.set('updatedName', 'Faiza Akbar ' + uniqueValue);",
+              "pm.collectionVariables.set('updatedEmail', 'faiza' + uniqueValue + '@example.com');",
+              "pm.collectionVariables.set('updatedCompany', 'QA Automation Ltd');"
+            ],
+            "type": "text/javascript"
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('PUT status code is 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "const response = pm.response.json();",
+              "",
+              "pm.test('Updated user ID matches selected ID', function () {",
+              "    pm.expect(response.id).to.eql(Number(pm.collectionVariables.get('userId')));",
+              "});",
+              "",
+              "pm.test('Updated name matches request', function () {",
+              "    pm.expect(response.name).to.eql(pm.collectionVariables.get('updatedName'));",
+              "});",
+              "",
+              "pm.test('Updated email matches request', function () {",
+              "    pm.expect(response.email).to.eql(pm.collectionVariables.get('updatedEmail'));",
+              "});",
+              "",
+              "pm.test('Updated company name matches request', function () {",
+              "    pm.expect(response.company.name).to.eql(pm.collectionVariables.get('updatedCompany'));",
+              "});",
+              "",
+              "pm.test('Phone number is not empty', function () {",
+              "    pm.expect(response.phone).to.be.a('string').that.is.not.empty;",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"id\": {{userId}},\n  \"name\": \"{{updatedName}}\",\n  \"email\": \"{{updatedEmail}}\",\n  \"phone\": \"{{userPhone}}\",\n  \"company\": {\n    \"name\": \"{{updatedCompany}}\"\n  }\n}"
+        },
+        "url": "{{baseUrl}}/users/{{userId}}"
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://jsonplaceholder.typicode.com"
+    }
+  ]
+}
