@@ -12,10 +12,18 @@ module.exports = defineConfig({
   fullyParallel: false,
   workers: 1,
 
-  reporter: [
-    ['list'],
-    ['html', { open: 'never' }],
-  ],
+  
+reporter: [
+  ['list'],
+  ['html', {
+    open: 'never',
+    outputFolder: 'playwright-report'
+  }],
+  ['allure-playwright', {
+    resultsDir: 'allure-results'
+  }]
+],
+
 
   use: {
     baseURL: 'https://demowebshop.tricentis.com',
